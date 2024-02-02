@@ -588,16 +588,16 @@ int GPSDriverNMEA::handleMessage(int len)
 		*/
 		double utc_time = 0.0;
 		float lat_err = 0.f, lon_err = 0.f, alt_err = 0.f;
-		float min_err = 0.f, maj_err = 0.f, deg_from_north = 0.f, rms_err = 0.f;
+		float min_err = 0.f, maj_err = 0.f, deg_from_north = 0.f, ehpe = 0.f;
 
 		NMEA_UNUSED(min_err);
 		NMEA_UNUSED(maj_err);
 		NMEA_UNUSED(deg_from_north);
-		NMEA_UNUSED(rms_err);
+		// NMEA_UNUSED(ehpe); // EHPE  -- equivalent horizontal position error
 
 		if (bufptr && *(++bufptr) != ',') { utc_time = strtod(bufptr, &endp); bufptr = endp; }
 
-		if (bufptr && *(++bufptr) != ',') { rms_err = strtof(bufptr, &endp); bufptr = endp; }
+		if (bufptr && *(++bufptr) != ',') { ehpe = strtof(bufptr, &endp); bufptr = endp; }
 
 		if (bufptr && *(++bufptr) != ',') { maj_err = strtof(bufptr, &endp); bufptr = endp; }
 
@@ -614,6 +614,8 @@ int GPSDriverNMEA::handleMessage(int len)
 		_gps_position->eph = sqrtf(static_cast<float>(lat_err) * static_cast<float>(lat_err)
 					   + static_cast<float>(lon_err) * static_cast<float>(lon_err));
 		_gps_position->epv = static_cast<float>(alt_err);
+
+		_gps_position->ehpe = ehpe;
 
 		_EPH_received = true;
 		_last_FIX_timeUTC = utc_time;
