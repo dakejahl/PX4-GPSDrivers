@@ -1040,10 +1040,8 @@ public:
 		int8_t min_elev;
 		uint8_t output_rate;
 		float heading_offset;
-		// Target baudrate for the receiver's UART1, applied after the link is
-		// auto-detected. 0 keeps the driver default (115200; heading modes
-		// 921600). Unlike a fixed baudrate this never prevents connecting to a
-		// receiver still at its power-on default.
+		// UART1 target rate applied after autobaud, so it never prevents
+		// connecting. 0 = driver default (115200; heading modes 921600).
 		int32_t uart1_baudrate;
 		int32_t uart2_baudrate;
 		bool ppk_output;

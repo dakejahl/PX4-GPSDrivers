@@ -124,9 +124,7 @@ GPSDriverUBX::configure(unsigned &baudrate, const GPSConfig &config)
 			desired_baudrate = UART1_BAUDRATE_HEADING;
 		}
 
-		// An explicit UART1 target wins. The probe scan is unaffected, so this
-		// cannot lock the driver out of a receiver at its power-on default the
-		// way a fixed baudrate does.
+		// An explicit UART1 target wins; the probe scan is unaffected.
 		if (_uart1_baudrate > 0) {
 			desired_baudrate = _uart1_baudrate;
 		}
@@ -2408,9 +2406,8 @@ GPSDriverUBX::payloadRxDone()
 #endif
 
 		} else {
-			// The struct is reused across messages, so without this a receiver
-			// that lost time in a reset keeps reporting the last time it knew.
-			// 0 is the defined "unavailable" value.
+			// The struct is reused across messages: without this, a receiver that
+			// lost time keeps reporting the last time it knew (0 = unavailable).
 			_gps_position->time_utc_usec = 0;
 		}
 
@@ -2552,9 +2549,8 @@ GPSDriverUBX::payloadRxDone()
 #endif
 
 		} else {
-			// The struct is reused across messages, so without this a receiver
-			// that lost time in a reset keeps reporting the last time it knew.
-			// 0 is the defined "unavailable" value.
+			// The struct is reused across messages: without this, a receiver that
+			// lost time keeps reporting the last time it knew (0 = unavailable).
 			_gps_position->time_utc_usec = 0;
 		}
 
